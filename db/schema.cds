@@ -20,6 +20,7 @@ entity Products {
         purchaseDate    : Date;
         warrantyPeriod  : String(10);
         warrantyEndDate : Date;
+        warrantyStatus : String(20);
         price           : Decimal(10, 2);
         customer        : Association to Customers;
 }
