@@ -1,14 +1,31 @@
-const { module } = require("@sap/cds/lib/compile/resolve");
 
-module.exports = (WarrantyService) =>{
+module.exports = (WarrantyService) => {
 
-    WarrantyService.before("CREATE","Product",(req)=>{
-        const data = req.body;
+    WarrantyService.before("CREATE", "Products", (req) => {
+        const data = req.data;
 
-        if(0< data.price){
+
+        //Price should not be negative
+        if (0 > data.price) {
             req.error('Price cannot be negative');
         }
-        
+
+        //Product Name should be there
+        if (!data.productName) {
+            req.error('Please specify the Product Name')
+        }
+
+        // Warranty End Date Logic
+        if (data.purchaseDate && data.warrantyPeriod) {
+            const purchaseDate = new Date(data.purchaseDate);
+            //converting the string value only into into integer value  '2 Years ' -> 2
+            const years = parseInt(data.warrantyPeriod);
+            const warrantyEndDate = new Date(purchaseDate);
+            warrantyEndDate.setFullYear(
+                purchaseDate.getFullYear() + years
+            );
+        }
+
     })
 
 }
