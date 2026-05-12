@@ -24,6 +24,19 @@ module.exports = (WarrantyService) => {
             warrantyEndDate.setFullYear(
                 purchaseDate.getFullYear() + years
             );
+            // Storing the values in the database  
+            data.warrantyEndDate = warrantyEndDate.toISOString().split('T')[0];  //Converting  Wed Oct 05 2011 16:48:00 GMT+0200 (CEST)-> "2011-10-05T14:48:00.000Z"
+        }
+
+        // Warranty Status Logic
+        if (data.warrantyEndDate) {
+            const todayDate = new Date();
+            const warrantyEndDate = new Date(data.warrantyEndDate)
+            if (todayDate > warrantyEndDate) {
+                data.warrantyStatus = 'Inactive'
+            } else {
+                data.warrantyStatus = 'Active'
+            }
         }
 
     })
